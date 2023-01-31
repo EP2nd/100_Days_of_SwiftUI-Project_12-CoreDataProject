@@ -23,6 +23,9 @@ struct FilteredList<T: NSManagedObject, Content: View>: View {
     /// This is the content closure; it'll be called once for each item in the list:
     let content: (T) -> Content
     
+    /// Challenge 3:
+    var sortDescriptors = [SortDescriptor<T>]()
+    
     var body: some View {
         List(fetchRequest, id: \.self) { singer in
             self.content(singer)
@@ -45,9 +48,9 @@ struct FilteredList<T: NSManagedObject, Content: View>: View {
         }
     }
     
-    /// Challenge 1 and 2:
+    /// Challenge 1, 2 and 3:
     init(/* predicateString: String, */ filterKey: String, filterValue: String, @ViewBuilder content: @escaping (T) -> Content) {
-        _fetchRequest = FetchRequest<T>(sortDescriptors: [], predicate: NSPredicate(format: "%K \(FilteredList<T, Content>.predicateKey(.beginsWith)) %@" /* <- \(predicateString) */, filterKey, filterValue))
+        _fetchRequest = FetchRequest<T>(sortDescriptors: /* [] */ sortDescriptors, predicate: NSPredicate(format: "%K \(FilteredList<T, Content>.predicateKey(.beginsWith)) %@" /* <- \(predicateString) */, filterKey, filterValue))
 //        self.predicateString = predicateString
         self.content = content
     }
